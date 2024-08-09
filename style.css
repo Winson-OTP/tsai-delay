@@ -8,15 +8,17 @@ body {
     margin-right:auto;
 }
 
-button {
+table button {
     width: 40;
     height: 40;
 }
 
 .light {
-    
+    background-color: white;
+    color: #373737;
 }
 
-.dark{
-
+.dark {
+    background-color: #373737;
+    color: white;
 }

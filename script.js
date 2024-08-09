@@ -1,19 +1,33 @@
-let whereDelayPut = document.getElementById('delay-home');
-let delayList = [];
-let whatToPut = "";
-let whatToDisplay = [];
-let buttons = [];
+let whereDelayPut = document.getElementById('delay-home'); // 地雷表格
+let delayList = []; // 地雷與否
+let whatToPut = ""; // html置入內容
+let whatToDisplay = []; // 九宮格地雷數量
+let buttons = []; // 按鈕html
+let ldMode = 0; // 明暗模式
+// let nineWhere = [-(board+1), -board, -(board-1), -1, 1, board-1, board, board+1]; // 九宮格取數
+let board = 9; // 棋盤大小
 
-for (let i=0; i<9*9; i++) {
-    let num = randomInt(99)+1;
-    if (num>=85) {
-        delayList.push('1');
-    } else {
-        delayList.push('0');
+// 隨機取地雷位置
+for (let i=0; i<board*board; i++) {
+    let num = board*board*0.14;
+    let delays = [];
+
+    while (delays.length<num) {
+        let n = randomInt(board*board);
+        if (delays.includes(n)) continue;
+        delays.push(n);
+    }
+    for (let k=0; k<board*board; k++) {
+        if (delays.includes(k)) {
+            delayList.push('1')
+        } else{
+            delayList.push('0');
+        }
     }
 }
 
-for (let i=0; i<9*9; i++) {
+// 統計九宮格地雷數量
+for (let i=0; i<board*board; i++) {
     let howManyDelay = 0;
     if (delayList[i-10] == "1" && i>9 && i%9!=0) howManyDelay++;
     if (delayList[i-9] == "1" && i>8) howManyDelay++;
@@ -26,7 +40,8 @@ for (let i=0; i<9*9; i++) {
     whatToDisplay.push(howManyDelay);
 }
 
-for (let i=1; i<9*9+1; i++) {
+// 按鈕置入html
+for (let i=1; i<board*board+1; i++) {
     if (i%9==0) {
         whatToPut += `<td><button id="delay${i}" oncontextmenu ="return false" style="width:30px;height:30px;"></button></td></tr>`
     } else if ((i-1)%9==0) {
@@ -35,10 +50,10 @@ for (let i=1; i<9*9+1; i++) {
         whatToPut += `<td><button id="delay${i}" oncontextmenu ="return false" style="width:30px;height:30px;"></button></td>`
     }
 }
-
 whereDelayPut.innerHTML = whatToPut;
 
-for (let i=1; i<9*9+1; i++) {
+// 踩地雷與標點
+for (let i=1; i<board*board+1; i++) {
     let btn = document.getElementById(`delay${i}`);
     buttons.push(btn);
     btn.onclick = function() {
@@ -51,32 +66,41 @@ for (let i=1; i<9*9+1; i++) {
     });
 }
 
+// 明暗切換
+let lord = document.getElementById('lord');
+lord.onclick = ldChange;
+
+// 隨機取數
 function randomInt(max) {
 	return Math.floor(Math.random()*max);
 }
 
+// 點按按鈕
 function click(delayNumber) {
     let btn = buttons[delayNumber-1];
     if (btn.disabled == true) return;
     btn.disabled = true;
     let i = delayNumber-1;
-    if (delayList[delayNumber-1] == "1") return gameover();
-    if (whatToDisplay[delayNumber-1] > 0) {
-        btn.innerHTML = whatToDisplay[i];
-        btn.style.backgroundColor = "#c0c0c0";
-    }
-    if (delayList[delayNumber-1] != "1") {
-        if (whatToDisplay[delayNumber-1] == 0) btn.style.backgroundColor = "#a9a9a9";
+    if (delayList[delayNumber-1] == "1") {
+        return gameover();
+    } else {
+        if (whatToDisplay[delayNumber-1] == 0) {
+            btn.style.backgroundColor = "#a9a9a9";
+        } else {
+            btn.innerHTML = whatToDisplay[i];
+            btn.style.backgroundColor = "#d0d0d0";
+        }
         if (whatToDisplay[i] == 0) {
             let others = jentser(i);
             console.log(others);
             for (let n=0; n<=others[1].length-1; n++) {
                 click(others[1][n]);
-            }          
+            }
         }
     }
 }
 
+// 標點
 function flag(delayNumber) {
     let btn = buttons[delayNumber-1];
     if (btn.disabled == true) return;
@@ -87,43 +111,70 @@ function flag(delayNumber) {
     }
 }
 
+// 遊戲結束(輸)
 function gameover() {
-    for (let i=0; i<9*9; i++) {
+    for (let i=0; i<board*board; i++) {
         let btn = buttons[i];
-        if (whatToDisplay[i] > 0 && delayList[i] == "0") btn.innerHTML = whatToDisplay[i];
-        if (delayList[i] == "1") {
+        btn.disabled = true;
+        if (whatToDisplay[i] > 0 && delayList[i] == "0") {
+            btn.innerHTML = whatToDisplay[i];
+            btn.style.backgroundColor = "#d0d0d0";
+        } else if (delayList[i] == "1") {
             btn.style.backgroundColor = "#FF9797";
         } else {
             btn.style.backgroundColor = "#a9a9a9";
         }
-        btn.disabled = true;
     }
 }
 
-function display(delayNumber) {
-    let btn = buttons[delayNumber-1];
-    btn.disabled = true;
-    btn.style.backgroundColor = "#FF9797";
+// 偵測顯示機制
+function jentser(i) {
+    let returnData = [];
+    if (i>9 && i%9!=0) {
+        if (delayList[i-10] == "1") return false;
+        returnData.push(i-10+1);
+    }
+    if (i>9 && i%9!=0) {
+        if (delayList[i-10] == "1") return false;
+        returnData.push(i-9+1);
+    }
+    if (i>7 && (i+1)%9!=0) {
+        if (delayList[i-8] == "1") return false;
+        returnData.push(i-8+1);
+    }
+    if (i>0 && i%9!=0) {
+        if (delayList[i-1] == "1") return false;
+        returnData.push(i-1+1);
+    }
+    if (i>0 && i%9!=0) {
+        if (delayList[i-1] == "1") return false;
+        returnData.push(i-1+1);
+    }
+    if (i<81&& (i+1)%9!=0) {
+        if (delayList[i+1] == "1") return false;
+        returnData.push(i+1+1);
+    }
+    if (i<74 && i%9!=0) {
+        if (delayList[i+8] == "1") return false;
+        returnData.push(i+8+1);
+    }
+    if (i<73) {
+        if (delayList[i+9] == "1") return false;
+    }
+    if (i<72&& (i+1)%9!=0) {
+        if (delayList[i+10] == "1") return false;
+        returnData.push(i+10+1);
+    }
+    return [true, returnData];
 }
 
-function jentser(i) {
-    if (delayList[i-10] == "1" && i>9 && i%9!=0) return false;;
-    if (delayList[i-9] == "1" && i>8) return false;
-    if (delayList[i-8] == "1" && i>7 && (i+1)%9!=0) return false;
-    if (delayList[i-1] == "1" && i>0 && i%9!=0) return false;
-    if (delayList[i+1] == "1" && i<81&& (i+1)%9!=0) return false;
-    if (delayList[i+8] == "1" && i<74 && i%9!=0) return false;
-    if (delayList[i+9] == "1" && i<73) return false;
-    if (delayList[i+10] == "1" && i<72&& (i+1)%9!=0) return false;
-
-    let returnData = [];
-    if (delayList[i-10] == "0" && i>9 && i%9!=0) returnData.push(i-10+1);
-    if (delayList[i-9] == "0" && i>8) returnData.push(i-9+1);
-    if (delayList[i-8] == "0" && i>7 && (i+1)%9!=0) returnData.push(i-8+1);
-    if (delayList[i-1] == "0" && i>0 && i%9!=0) returnData.push(i-1+1);
-    if (delayList[i+1] == "0" && i<81&& (i+1)%9!=0) returnData.push(i+1+1);
-    if (delayList[i+8] == "0" && i<74 && i%9!=0) returnData.push(i+8+1);
-    if (delayList[i+9] == "0" && i<73) returnData.push(i+9+1);
-    if (delayList[i+10] == "0" && i<72&& (i+1)%9!=0) returnData.push(i+10+1);
-    return [true, returnData];
+// 明暗切換
+function ldChange() {
+    if (ldMode == 0) {
+        ldMode = 1;
+        document.body.setAttribute("class", "dark");
+    } else {
+        ldMode = 0;
+        document.body.setAttribute("class", "light");
+    }
 }
