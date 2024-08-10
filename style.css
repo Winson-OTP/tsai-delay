@@ -22,3 +22,93 @@ table button {
     background-color: #373737;
     color: white;
 }
+
+.light #lord {
+    margin-top: 20px;
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #b3b3b3;
+    background-color: #e2e2e2;
+}
+
+.dark #lord {
+    margin-top: 20px;
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    color: white;
+    border-color: #cacaca;
+    background-color: #525252;
+}
+
+.light #lord:hover {
+    margin-top: 20px;
+    width: 160px;
+    height: 40px;
+    transition-duration: 0.5s;
+    border-radius: 20px;
+    background-color: #fffede;
+}
+
+.dark #lord:hover {
+    margin-top: 20px;
+    width: 160px;
+    height: 40px;
+    transition-duration: 0.5s;
+    border-radius: 20px;
+    background-color: #706f64;
+}
+
+.light .normal {
+    background-color: #F0F0F0;
+    color: #F0F0F0;
+}
+
+.light .noDelayNoNine {
+    background-color: #c2cfba;
+    color: #c2cfba;
+}
+
+.light .noDelayYesNine {
+    background-color: #ced2d3;
+}
+
+.light .yesFlag {
+    background-color: #bda792;
+    color: #bda792;
+}
+
+.light .yesDelay {
+    background-color: #e4b7b7;
+    color: #e4b7b7;
+}
+
+.dark .normal {
+    background-color: #575757;
+    color: #575757;
+}
+
+.dark .noDelayNoNine {
+    background-color: #6e7e63;
+    color: #6e7e63;
+}
+
+.dark .noDelayYesNine {
+    background-color: #696969;
+    color: #919191;
+}
+
+.dark .yesFlag {
+    background-color: #7a6f65;
+    color: #7a6f65;
+}
+
+.dark .yesDelay {
+    background-color: #a08787;
+    color: #a08787;
+}
