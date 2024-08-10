@@ -25,11 +25,13 @@ table button {
 .light {
     background-color: white;
     color: #202020;
+    transition-duration: 0.5s;
 }
 
 .dark {
     background-color: #262626;
     color: white;
+    transition-duration: 0.5s;
 }
 
 .setbtn {
@@ -37,14 +39,13 @@ table button {
     width: 120px;
     height: 40px;
     border-radius: 20px;
-    border-style: solid;
-    border-width: 1px;
+    border-width: 0px;
 }
 
 .dark .setbtn {
     color: white;
     border-color: #cacaca;
-    background-color: #525252;
+    background-color: #6a6561;
 }
 
 .light .setbtn {
@@ -61,11 +62,11 @@ table button {
 }
 
 .light .setbtn:hover {
-    background-color: #fffede;
+    background-color: #ffece2;
 }
 
 .dark .setbtn:hover {
-    background-color: #706f64;
+    background-color: #987f6d;
 }
 
 .light .normal {
@@ -76,20 +77,24 @@ table button {
 .light .noDelayNoNine {
     background-color: #c2cfba;
     color: #c2cfba;
+    transition-duration: 0.5s;
 }
 
 .light .noDelayYesNine {
     background-color: #ced2d3;
+    transition-duration: 0.5s;
 }
 
 .light .yesFlag {
     background-color: #bda792;
     color: #bda792;
+    transition-duration: 0.5s;
 }
 
 .light .yesDelay {
     background-color: #e4b7b7;
     color: #e4b7b7;
+    transition-duration: 0.5s;
 }
 
 .dark .normal {
@@ -100,19 +105,23 @@ table button {
 .dark .noDelayNoNine {
     background-color: #6e7e63;
     color: #6e7e63;
+    transition-duration: 0.5s;
 }
 
 .dark .noDelayYesNine {
     background-color: #696969;
     color: #c9c9c9;
+    transition-duration: 0.5s;
 }
 
 .dark .yesFlag {
     background-color: #7a6f65;
     color: #7a6f65;
+    transition-duration: 0.5s;
 }
 
 .dark .yesDelay {
     background-color: #a08787;
     color: #a08787;
+    transition-duration: 0.5s;
 }

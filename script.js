@@ -4,8 +4,8 @@ let whatToPut = ""; // html置入內容
 let whatToDisplay = []; // 九宮格地雷數量
 let buttons = []; // 按鈕html
 let ldMode = 0; // 明暗模式
-// let nineWhere = [-(board+1), -board, -(board-1), -1, 1, board-1, board, board+1]; // 九宮格取數
 let board = 9; // 棋盤大小
+// let nineWhere = [-(board+1), -board, -(board-1), -1, 1, board-1, board, board+1]; // 九宮格取數
 let start = false; // 開始偵測
 let flags = [];
 let delays = []; // 地雷位置
@@ -99,20 +99,18 @@ function click(delayNumber) {
     if (!btn || btn.disabled == true) return;
     btn.disabled = true;
     let i = delayNumber-1;
-    if (delayList[delayNumber-1] == "1") {
+    if (delayList[i] == "1") {
         return gameover();
     } else {
-        if (whatToDisplay[delayNumber-1] == 0) {
-            btn.setAttribute("class", "noDelayNoNine");
-        } else {
-            btn.innerHTML = whatToDisplay[i];
-            btn.setAttribute("class", "noDelayYesNine");
-        }
         if (whatToDisplay[i] == 0) {
+            btn.setAttribute("class", "noDelayNoNine");
             let others = jentser(i);
             for (let n=0; n<=others[1].length-1; n++) {
                 click(others[1][n]);
             }
+        } else {
+            btn.innerHTML = whatToDisplay[i];
+            btn.setAttribute("class", "noDelayYesNine");
         }
     }
 }
