@@ -20,16 +20,16 @@ document.body.setAttribute("class", document.cookie.replace(
 // 按鈕置入html
 for (let i=1; i<board*board+1; i++) {
     if (i%9==0) {
-        whatToPut += `<td><button id="delay${i}" class="normal" oncontextmenu ="return false" style="width:30px;height:30px;">0</button></td></tr>`
+        whatToPut += `<td><button id="delay${i}" class="normal" oncontextmenu ="return false">0</button></td></tr>`
     } else if ((i-1)%9==0) {
-        whatToPut += `<tr><td><button id="delay${i}" class="normal" oncontextmenu ="return false" style="width:30px;height:30px;">0</button></td>`
+        whatToPut += `<tr><td><button id="delay${i}" class="normal" oncontextmenu ="return false">0</button></td>`
     } else {
-        whatToPut += `<td><button id="delay${i}" class="normal" oncontextmenu ="return false" style="width:30px;height:30px;">0</button></td>`
+        whatToPut += `<td><button id="delay${i}" class="normal" oncontextmenu ="return false">0</button></td>`
     }
 }
 whereDelayPut.innerHTML = whatToPut;
 
-// 踩地雷與標點
+// 地雷動作偵測
 for (let i=1; i<board*board+1; i++) {
     let btn = document.getElementById(`delay${i}`);
     buttons.push(btn);
@@ -43,9 +43,11 @@ for (let i=1; i<board*board+1; i++) {
     });
 }
 
-// 明暗切換
-let lord = document.getElementById('lord');
-lord.onclick = ldChange;
+// 隨機取數
+function randomInt(max) {
+	return Math.floor(Math.random()*max);
+}
+
 
 // 開始遊戲
 function startRanbow(e) {
@@ -84,11 +86,6 @@ function startRanbow(e) {
     }
 }
 
-// 隨機取數
-function randomInt(max) {
-	return Math.floor(Math.random()*max);
-}
-
 // 點按按鈕
 function click(delayNumber) {
     if (!start) {
@@ -118,6 +115,44 @@ function click(delayNumber) {
             }
         }
     }
+}
+
+// 偵測顯示機制
+function jentser(i) {
+    let returnData = [];
+    if (i>9 && i%9!=0) {
+        if (delayList[i-10] == "1") return false;
+        returnData.push(i-10+1);
+    }
+    if (i>8) {
+        if (delayList[i-9] == "1") return false;
+        returnData.push(i-9+1);
+    }
+    if (i>7 && (i+1)%9!=0) {
+        if (delayList[i-8] == "1") return false;
+        returnData.push(i-8+1);
+    }
+    if (i>0 && i%9!=0) {
+        if (delayList[i-1] == "1") return false;
+        returnData.push(i-1+1);
+    }
+    if (i<81&& (i+1)%9!=0) {
+        if (delayList[i+1] == "1") return false;
+        returnData.push(i+1+1);
+    }
+    if (i<74 && i%9!=0) {
+        if (delayList[i+8] == "1") return false;
+        returnData.push(i+8+1);
+    }
+    if (i<73) {
+        if (delayList[i+9] == "1") return false;
+        returnData.push(i+9+1);
+    }
+    if (i<72&& (i+1)%9!=0) {
+        if (delayList[i+10] == "1") return false;
+        returnData.push(i+10+1);
+    }
+    return [true, returnData];
 }
 
 // 標點
@@ -167,54 +202,16 @@ function gamewin() {
     document.getElementById('gamestatewin').innerHTML = "恭喜通關！";
 }
 
-
-// 偵測顯示機制
-function jentser(i) {
-    let returnData = [];
-    if (i>9 && i%9!=0) {
-        if (delayList[i-10] == "1") return false;
-        returnData.push(i-10+1);
-    }
-    if (i>8) {
-        if (delayList[i-9] == "1") return false;
-        returnData.push(i-9+1);
-    }
-    if (i>7 && (i+1)%9!=0) {
-        if (delayList[i-8] == "1") return false;
-        returnData.push(i-8+1);
-    }
-    if (i>0 && i%9!=0) {
-        if (delayList[i-1] == "1") return false;
-        returnData.push(i-1+1);
-    }
-    if (i<81&& (i+1)%9!=0) {
-        if (delayList[i+1] == "1") return false;
-        returnData.push(i+1+1);
-    }
-    if (i<74 && i%9!=0) {
-        if (delayList[i+8] == "1") return false;
-        returnData.push(i+8+1);
-    }
-    if (i<73) {
-        if (delayList[i+9] == "1") return false;
-        returnData.push(i+9+1);
-    }
-    if (i<72&& (i+1)%9!=0) {
-        if (delayList[i+10] == "1") return false;
-        returnData.push(i+10+1);
-    }
-    return [true, returnData];
-}
-
 // 明暗切換
-function ldChange() {
+let lord = document.getElementById('lord');
+lord.onclick = () => {
     if (ldMode == 0) {
         ldMode = 1;
         document.body.setAttribute("class", "dark");
-        document.cookie = "mode=dark"
+        document.cookie = "mode=dark";
     } else {
         ldMode = 0;
         document.body.setAttribute("class", "light");
-        document.cookie = "mode=light"
+        document.cookie = "mode=light";
     }
 }

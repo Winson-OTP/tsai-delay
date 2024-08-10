@@ -1,19 +1,27 @@
 body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     text-align: center;
-    user-select:none;
+    user-select: none;
 }
 
+/* 介面置中 */
 #delay-home {
-    margin-left:auto; 
-    margin-right:auto;
+    margin-left: auto; 
+    margin-right: auto;
 }
 
+/* 按鈕型式 */
 table button {
-    width: 40;
-    height: 40;
+    width: 32px;
+    height: 32px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    border-width: 0px;
 }
 
+/* 主題 */
 .light {
     background-color: white;
     color: #202020;
@@ -22,10 +30,6 @@ table button {
 .dark {
     background-color: #262626;
     color: white;
-}
-
-button {
-    border-width: 0px;
 }
 
 .setbtn {
