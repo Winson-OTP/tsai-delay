@@ -7,6 +7,8 @@ let ldMode = 0; // 明暗模式
 // let nineWhere = [-(board+1), -board, -(board-1), -1, 1, board-1, board, board+1]; // 九宮格取數
 let board = 9; // 棋盤大小
 let start = false; // 開始偵測
+let flags = [];
+let delays = []; // 地雷位置
 
 // 按鈕置入html
 for (let i=1; i<board*board+1; i++) {
@@ -43,7 +45,7 @@ function startRanbow(e) {
     // 隨機取地雷位置
     for (let i=0; i<board*board; i++) {
         let num = board*board*0.14;
-        let delays = [];
+        
 
         while (delays.length<num) {
             let n = randomInt(board*board);
@@ -86,8 +88,11 @@ function click(delayNumber) {
         start = true;
         startRanbow(delayNumber-1);
     }
+    if (flags.includes(delayNumber-1)) {
+        flags.splice(flags.indexOf(delayNumber-1), 1);
+    }
     let btn = buttons[delayNumber-1];
-    if (btn.disabled == true) return;
+    if (!btn || btn.disabled == true) return;
     btn.disabled = true;
     let i = delayNumber-1;
     if (delayList[delayNumber-1] == "1") {
@@ -101,12 +106,12 @@ function click(delayNumber) {
         }
         if (whatToDisplay[i] == 0) {
             let others = jentser(i);
-            console.log(others);
             for (let n=0; n<=others[1].length-1; n++) {
                 click(others[1][n]);
             }
         }
     }
+    if (flags.sort() == delays.sort()) gamewin();
 }
 
 // 標點
@@ -115,8 +120,10 @@ function flag(delayNumber) {
     if (btn.disabled == true) return;
     if (btn.getAttribute('class') == "yesFlag") {
         btn.setAttribute("class", "normal");
+        flags.splice(flags.indexOf(delayNumber-1), 1);
     } else {
         btn.setAttribute("class", "yesFlag");
+        flags.push(delayNumber-1);
     }
 }
 
@@ -136,6 +143,22 @@ function gameover() {
     }
 }
 
+// 遊戲結束(贏)
+function gamewin() {
+    for (let i=0; i<board*board; i++) {
+        let btn = buttons[i];
+        btn.disabled = true;
+        if (whatToDisplay[i] > 0 && delayList[i] == "0") {
+            btn.setAttribute("class", "noDelayYesNine");
+        } else if (delayList[i] == "1") {
+            btn.setAttribute("class", "yesDelay");
+        } else {
+            btn.setAttribute("class", "noDelayNoNine");
+        }
+    }
+}
+
+
 // 偵測顯示機制
 function jentser(i) {
     let returnData = [];
@@ -143,17 +166,13 @@ function jentser(i) {
         if (delayList[i-10] == "1") return false;
         returnData.push(i-10+1);
     }
-    if (i>9 && i%9!=0) {
+    if (i>8) {
         if (delayList[i-9] == "1") return false;
         returnData.push(i-9+1);
     }
     if (i>7 && (i+1)%9!=0) {
         if (delayList[i-8] == "1") return false;
         returnData.push(i-8+1);
-    }
-    if (i>0 && i%9!=0) {
-        if (delayList[i-1] == "1") return false;
-        returnData.push(i-1+1);
     }
     if (i>0 && i%9!=0) {
         if (delayList[i-1] == "1") return false;
