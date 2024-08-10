@@ -5,8 +5,9 @@ let whatToDisplay = []; // 九宮格地雷數量
 let buttons = []; // 按鈕html
 let board = 9; // 棋盤大小
 // let nineWhere = [-(board+1), -board, -(board-1), -1, 1, board-1, board, board+1]; // 九宮格取數
-let flags = [];
 let delays = []; // 地雷位置
+let notdelays = []; // 非地雷位置
+let opened = []; // 已開位置
 
 // 按鈕置入html
 for (let i=1; i<board*board+1; i++) {
@@ -46,21 +47,19 @@ let start = false; // 開始偵測
 function startRanbow(e) {
     timer = setInterval(timeAdd, 1000);
     // 隨機取地雷位置
-    for (let i=0; i<board*board; i++) {
-        let num = board*board*0.1;
-        
+    let num = board*board*0.1;
 
-        while (delays.length<num) {
-            let n = randomInt(board*board);
-            if (delays.includes(n) || n==e) continue;
-            delays.push(n);
-        }
-        for (let k=0; k<board*board; k++) {
-            if (delays.includes(k)) {
-                delayList.push('1')
-            } else {
-                delayList.push('0');
-            }
+    while (delays.length<num) {
+        let n = randomInt(board*board);
+        if (delays.includes(n) || n==e) continue;
+        delays.push(n);
+    }
+    for (let k=0; k<board*board; k++) {
+        if (delays.includes(k)) {
+            delayList.push('1');
+        } else {
+            delayList.push('0');
+            notdelays.push(k);
         }
     }
 
@@ -86,9 +85,6 @@ function click(delayNumber) {
         start = true;
         startRanbow(delayNumber-1);
     }
-    if (flags.includes(delayNumber-1)) {
-        flags.splice(flags.indexOf(delayNumber-1), 1);
-    }
     let btn = buttons[delayNumber-1];
     if (!btn || btn.disabled == true) return;
     btn.disabled = true;
@@ -96,6 +92,7 @@ function click(delayNumber) {
     if (delayList[i] == "1") {
         return gameover();
     } else {
+        opened.push(delayNumber-1);
         if (whatToDisplay[i] == 0) {
             btn.setAttribute("class", "noDelayNoNine");
             let others = jentser(i);
@@ -107,6 +104,8 @@ function click(delayNumber) {
             btn.setAttribute("class", "noDelayYesNine");
         }
     }
+    console.log(opened.sort(), notdelays.sort())
+    if (opened.sort().toString() == notdelays.sort().toString()) gamewin();
 }
 
 // 偵測顯示機制
@@ -153,12 +152,9 @@ function flag(delayNumber) {
     if (btn.disabled == true) return;
     if (btn.getAttribute('class') == "yesFlag") {
         btn.setAttribute("class", "normal");
-        flags.splice(flags.indexOf(delayNumber-1), 1);
     } else {
         btn.setAttribute("class", "yesFlag");
-        flags.push(delayNumber-1);
     }
-    if (flags.sort().toString() == delays.sort().toString()) gamewin();
 }
 
 // 遊戲結束(輸)
