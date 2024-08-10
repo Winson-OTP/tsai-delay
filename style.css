@@ -15,11 +15,11 @@ table button {
 
 .light {
     background-color: white;
-    color: #373737;
+    color: #202020;
 }
 
 .dark {
-    background-color: #373737;
+    background-color: #262626;
     color: white;
 }
 
@@ -27,44 +27,39 @@ button {
     border-width: 0px;
 }
 
-.light #lord {
+.setbtn {
     margin-top: 20px;
     width: 120px;
     height: 40px;
     border-radius: 20px;
     border-style: solid;
     border-width: 1px;
-    border-color: #b3b3b3;
-    background-color: #e2e2e2;
 }
 
-.dark #lord {
-    margin-top: 20px;
-    width: 120px;
-    height: 40px;
-    border-radius: 20px;
-    border-style: solid;
-    border-width: 1px;
+.dark .setbtn {
     color: white;
     border-color: #cacaca;
     background-color: #525252;
 }
 
-.light #lord:hover {
+.light .setbtn {
+    border-color: #acacac;
+    background-color: #e6e6e6;
+}
+
+.setbtn:hover {
     margin-top: 20px;
     width: 160px;
     height: 40px;
     transition-duration: 0.5s;
     border-radius: 20px;
+}
+
+.light .setbtn:hover {
     background-color: #fffede;
 }
 
-.dark #lord:hover {
-    margin-top: 20px;
-    width: 160px;
-    height: 40px;
-    transition-duration: 0.5s;
-    border-radius: 20px;
+.dark .setbtn:hover {
     background-color: #706f64;
 }
 
@@ -104,7 +99,7 @@ button {
 
 .dark .noDelayYesNine {
     background-color: #696969;
-    color: #919191;
+    color: #c9c9c9;
 }
 
 .dark .yesFlag {

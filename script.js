@@ -10,6 +10,13 @@ let start = false; // 開始偵測
 let flags = [];
 let delays = []; // 地雷位置
 
+// 模式調整
+if (!document.cookie) document.cookie = "mode=light";
+document.body.setAttribute("class", document.cookie.replace(
+    /(?:(?:^|.*;\s*)mode\s*\=\s*([^;]*).*$)|^.*$/,
+    "$1",
+));
+
 // 按鈕置入html
 for (let i=1; i<board*board+1; i++) {
     if (i%9==0) {
@@ -44,7 +51,7 @@ lord.onclick = ldChange;
 function startRanbow(e) {
     // 隨機取地雷位置
     for (let i=0; i<board*board; i++) {
-        let num = board*board*0.14;
+        let num = board*board*0.1;
         
 
         while (delays.length<num) {
@@ -111,7 +118,6 @@ function click(delayNumber) {
             }
         }
     }
-    if (flags.sort() == delays.sort()) gamewin();
 }
 
 // 標點
@@ -125,6 +131,7 @@ function flag(delayNumber) {
         btn.setAttribute("class", "yesFlag");
         flags.push(delayNumber-1);
     }
+    if (flags.sort().toString() == delays.sort().toString()) gamewin();
 }
 
 // 遊戲結束(輸)
@@ -141,6 +148,7 @@ function gameover() {
             btn.setAttribute("class", "noDelayNoNine");
         }
     }
+    document.getElementById('gamestatelose').innerHTML = "再接再厲";
 }
 
 // 遊戲結束(贏)
@@ -156,6 +164,7 @@ function gamewin() {
             btn.setAttribute("class", "noDelayNoNine");
         }
     }
+    document.getElementById('gamestatewin').innerHTML = "恭喜通關！";
 }
 
 
@@ -202,8 +211,10 @@ function ldChange() {
     if (ldMode == 0) {
         ldMode = 1;
         document.body.setAttribute("class", "dark");
+        document.cookie = "mode=dark"
     } else {
         ldMode = 0;
         document.body.setAttribute("class", "light");
+        document.cookie = "mode=light"
     }
 }
