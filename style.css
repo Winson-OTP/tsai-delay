@@ -4,10 +4,6 @@ body {
     user-select: none;
 }
 
-.noclass {
-    background-color: #858585;
-}
-
 /* 介面置中 */
 #delay-home {
     margin-left: auto; 
