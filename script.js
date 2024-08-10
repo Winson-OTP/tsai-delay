@@ -3,19 +3,10 @@ let delayList = []; // 地雷與否
 let whatToPut = ""; // html置入內容
 let whatToDisplay = []; // 九宮格地雷數量
 let buttons = []; // 按鈕html
-let ldMode = 0; // 明暗模式
 let board = 9; // 棋盤大小
 // let nineWhere = [-(board+1), -board, -(board-1), -1, 1, board-1, board, board+1]; // 九宮格取數
-let start = false; // 開始偵測
 let flags = [];
 let delays = []; // 地雷位置
-
-// 模式調整
-if (!document.cookie) document.cookie = "mode=light";
-document.body.setAttribute("class", document.cookie.replace(
-    /(?:(?:^|.*;\s*)mode\s*\=\s*([^;]*).*$)|^.*$/,
-    "$1",
-));
 
 // 按鈕置入html
 for (let i=1; i<board*board+1; i++) {
@@ -50,7 +41,10 @@ function randomInt(max) {
 
 
 // 開始遊戲
+let timer; // 計時器
+let start = false; // 開始偵測
 function startRanbow(e) {
+    timer = setInterval(timeAdd, 1000);
     // 隨機取地雷位置
     for (let i=0; i<board*board; i++) {
         let num = board*board*0.1;
@@ -182,6 +176,7 @@ function gameover() {
         }
     }
     document.getElementById('gamestatelose').innerHTML = "再接再厲";
+    clearInterval(timer);
 }
 
 // 遊戲結束(贏)
@@ -198,18 +193,36 @@ function gamewin() {
         }
     }
     document.getElementById('gamestatewin').innerHTML = "恭喜通關！";
+    clearInterval(timer);
 }
 
 // 明暗切換
+if (!document.cookie) document.cookie = "mode=light";
+document.body.setAttribute("class", document.cookie.replace(
+    /(?:(?:^|.*;\s*)mode\s*\=\s*([^;]*).*$)|^.*$/,
+    "$1",
+));
+let ldMode = document.cookie.replace(
+    /(?:(?:^|.*;\s*)mode\s*\=\s*([^;]*).*$)|^.*$/,
+    "$1",
+); // 明暗模式
 let lord = document.getElementById('lord');
 lord.onclick = () => {
-    if (ldMode == 0) {
-        ldMode = 1;
+    if (ldMode == "light") {
+        ldMode = "dark";
         document.body.setAttribute("class", "dark");
         document.cookie = "mode=dark";
     } else {
-        ldMode = 0;
+        ldMode = "light";
         document.body.setAttribute("class", "light");
         document.cookie = "mode=light";
     }
+}
+
+// 碼表
+let time = 0;
+let whereTime = document.getElementById('time');
+function timeAdd() {
+    time++;
+    whereTime.innerHTML = time;
 }
