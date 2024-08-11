@@ -87,12 +87,12 @@ function click(delayNumber) {
     }
     let btn = buttons[delayNumber-1];
     if (!btn || btn.disabled == true) return;
+    opened.push(delayNumber-1);
     btn.disabled = true;
     let i = delayNumber-1;
     if (delayList[i] == "1") {
         return gameover();
     } else {
-        opened.push(delayNumber-1);
         if (whatToDisplay[i] == 0) {
             btn.setAttribute("class", "noDelayNoNine");
             let others = jentser(i);
